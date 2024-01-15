@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Stops App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        .list-group-item {
+            background-color: #ffffff;
+            border-color: #dee2e6;
+            color: #495057;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: #007bff;
+        }
+
+        #busImage {
+            width: 80%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .clear-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img id="busImage" src="https://bus-market.ru/zadmin_data/mode.image/160241.png" alt="Автобус">
+
+        <h2 class="text-center">Bus Stops</h2>
+
+        <form>
+            <div class="form-group">
+                <label for="cityInput">Город:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="cityInput" placeholder="Введите город">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="stopsDropdown">Выберите город:</label>
+                <select id="stopsDropdown" class="form-control">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cityInput2">Остановка:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="cityInput2" placeholder="Введите город">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="stopsDropdown2">Выберите остановку:</label>
+                <select id="stopsDropdown2" class="form-control">
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary clear-btn" onclick="clearFields()">Очистить все поля</button>
+        </form>
+
+        <ul id="stopsList" class="list-group"></ul>
+    </div>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/stops')
+                .then(response => response.json())
+                .then(data => {
+                    const stopsDropdown = document.getElementById('stopsDropdown');
+                    const stopsDropdown2 = document.getElementById('stopsDropdown2');
+                    data.forEach(stop => {
+                        const option1 = document.createElement('option');
+                        option1.value = stop.stop_id;
+                        option1.textContent = stop.stop_name;
+                        stopsDropdown.appendChild(option1);
+
+                        const option2 = document.createElement('option');
+                        option2.value = stop.stop_id;
+                        option2.textContent = stop.stop_name;
+                        stopsDropdown2.appendChild(option2);
+                    });
+                });
+        });
+
+        function clearFields() {
+            document.getElementById('cityInput').value = '';
+            document.getElementById('stopsDropdown').selectedIndex = 0;
+            document.getElementById('cityInput2').value = '';
+            document.getElementById('stopsDropdown2').selectedIndex = 0;
+        }
+    </script>
+</body>
+</html>
